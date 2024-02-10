@@ -9,7 +9,7 @@ interface WorldMapContextProps {
   countriesVisaStatus: object;
 }
 
-export const WorldMapContext = createContext<WorldMapContextProps | null>(null)
+export const WorldMapContext = createContext<WorldMapContextProps | null>(null);
 
 function WorldMapProvider({ children }: { children: React.ReactNode }) {
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
@@ -18,59 +18,61 @@ function WorldMapProvider({ children }: { children: React.ReactNode }) {
     visaOnArrival: [],
     visaOnline: [],
     visaRequired: [],
-    eta: []
-  })
+    eta: [],
+  });
 
   const isCountryHighlighted = (countryName: string) => {
-    return selectedCountries.includes(countryName)
-  }
+    return selectedCountries.includes(countryName);
+  };
 
   const toggleCountry = (countryName: string) => {
-    setSelectedCountries(prevCountries => (
-      prevCountries.includes(countryName) ?
-        prevCountries.filter(p => p !== countryName) :
-        [...prevCountries, countryName]
-    ))
-  }
+    setSelectedCountries((prevCountries) =>
+      prevCountries.includes(countryName)
+        ? prevCountries.filter((p) => p !== countryName)
+        : [...prevCountries, countryName]
+    );
+  };
 
   const highlightCountry = (countryName: string) => {
-    setSelectedCountries(prevCountries =>
-      prevCountries.includes(countryName) ?
-        prevCountries : [...prevCountries, countryName]
-    )
-  }
+    setSelectedCountries((prevCountries) =>
+      prevCountries.includes(countryName)
+        ? prevCountries
+        : [...prevCountries, countryName]
+    );
+  };
 
   const highlightCountries = (countryObject: any) => {
     const countriesName = Object.values<string[]>(countryObject).flat();
 
     setCountriesVisaStatus({
-      ...countriesVisaStatus,
       visaFree: countryObject.visaFree,
       visaOnArrival: countryObject.visaOnArrival,
       visaOnline: countryObject.visaOnline,
       visaRequired: countryObject.visaRequired,
-      eta: countryObject.eta
-    })
+      eta: countryObject.eta,
+    });
 
-    setSelectedCountries(prevCountries => (
-      prevCountries.concat(countriesName.filter(i => !prevCountries.includes(i))))
-    )
-  }
-
-
+    setSelectedCountries((prevCountries) =>
+      prevCountries.concat(
+        countriesName.filter((i) => !prevCountries.includes(i))
+      )
+    );
+  };
 
   return (
-    <WorldMapContext.Provider value={{
-      isCountryHighlighted,
-      toggleCountry,
-      highlightCountries,
-      highlightCountry,
-      selectedCountries,
-      countriesVisaStatus
-    }}>
+    <WorldMapContext.Provider
+      value={{
+        isCountryHighlighted,
+        toggleCountry,
+        highlightCountries,
+        highlightCountry,
+        selectedCountries,
+        countriesVisaStatus,
+      }}
+    >
       {children}
     </WorldMapContext.Provider>
-  )
+  );
 }
 
 export default WorldMapProvider;
